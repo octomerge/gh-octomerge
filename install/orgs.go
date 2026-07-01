@@ -45,3 +45,33 @@ func LookupOrgID(login string) (int64, error) {
 	}
 	return org.ID, nil
 }
+
+// orgInstallations is the slice of GET /orgs/{org}/installations we read: the
+// slug of every GitHub App installed on the organization.
+type orgInstallations struct {
+	Installations []struct {
+		AppSlug string `json:"app_slug"`
+	} `json:"installations"`
+}
+
+// AppInstalled reports whether the octomerge App is already installed on the
+// organization, via GET /orgs/{org}/installations. That endpoint requires the
+// caller to be an org owner whose token carries the admin:org scope, so the check
+// is best-effort: on any error (insufficient scope, a personal account, an API
+// failure) it returns the error and the caller falls back to the install step.
+func AppInstalled(login string) (bool, error) {
+	client, err := api.DefaultRESTClient()
+	if err != nil {
+		return false, fmt.Errorf("creating REST client: %w", err)
+	}
+	var resp orgInstallations
+	if err := client.Get("orgs/"+login+"/installations", &resp); err != nil {
+		return false, fmt.Errorf("listing installed apps for %q: %w", login, err)
+	}
+	for _, in := range resp.Installations {
+		if in.AppSlug == appSlug {
+			return true, nil
+		}
+	}
+	return false, nil
+}

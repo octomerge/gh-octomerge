@@ -28,11 +28,13 @@ func newRootCmd() *cobra.Command {
 		RunE: func(cmd *cobra.Command, _ []string) error {
 			org, _ := cmd.Flags().GetString("org")
 			yes, _ := cmd.Flags().GetBool("yes")
-			return install.Run(cmd.Context(), install.Options{Org: org, AutoConfirm: yes})
+			public, _ := cmd.Flags().GetBool("public")
+			return install.Run(cmd.Context(), install.Options{Org: org, AutoConfirm: yes, Public: public})
 		},
 	}
 	root.Flags().StringP("org", "o", "", "target GitHub organization (skips the picker)")
 	root.Flags().BoolP("yes", "y", false, "skip the confirmation prompt")
+	root.Flags().Bool("public", false, "create the .octomerge repository as public (default private)")
 	return root
 }
 

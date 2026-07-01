@@ -2,6 +2,7 @@ package install
 
 import (
 	"errors"
+	"fmt"
 	"strings"
 
 	"charm.land/huh/v2"
@@ -11,24 +12,19 @@ import (
 // The NUL byte keeps it from ever colliding with a real organization login.
 const manualSentinel = "\x00manual"
 
-type formResult struct {
-	Org       Org
-	Confirmed bool
-}
-
-// runForm renders the TUI: pick an organization (from the user's orgs, with a
-// manual-entry fallback) and confirm. It blocks until the form is submitted or
-// aborted. A Ctrl-C / Esc abort is reported as an unconfirmed result rather than
-// an error, so the caller can exit cleanly.
+// selectOrg renders the org picker: choose from the user's orgs (with a
+// manual-entry fallback) or, when none are listable, type one directly. It blocks
+// until submitted or aborted, and returns the chosen org plus whether the user
+// proceeded — a Ctrl-C / Esc abort is reported as proceeded=false rather than an
+// error so the caller can exit cleanly.
 //
-// huh v2's conditional visibility is per-group, so the manual-entry Input lives
-// in its own group gated by WithHideFunc; the org Select and the Confirm are
-// their own groups. A huh.Form is itself a tea.Model, so this could later be
-// embedded in a larger Bubble Tea program instead of calling Run directly.
-func runForm(orgs []Org, preselect string) (formResult, error) {
+// huh v2's conditional visibility is per-group, so the manual-entry Input lives in
+// its own group gated by WithHideFunc. Confirming whether to open the browser is a
+// separate step (confirmInstall), so it can be skipped when the App is already
+// installed.
+func selectOrg(orgs []Org, preselect string) (Org, bool, error) {
 	picked := preselect
 	typed := preselect
-	confirmed := true
 
 	var groups []*huh.Group
 
@@ -72,22 +68,35 @@ func runForm(orgs []Org, preselect string) (formResult, error) {
 		))
 	}
 
-	groups = append(groups, huh.NewGroup(
-		huh.NewConfirm().
-			Key("confirm").
-			Title("Open your browser to install the octomerge GitHub App?").
-			Affirmative("Yes, open browser").
-			Negative("Cancel").
-			Value(&confirmed),
-	))
-
 	if err := huh.NewForm(groups...).Run(); err != nil {
 		if errors.Is(err, huh.ErrUserAborted) {
-			return formResult{Confirmed: false}, nil
+			return Org{}, false, nil
 		}
-		return formResult{}, err
+		return Org{}, false, err
 	}
-	return formResult{Org: resolvePickedOrg(orgs, picked, typed), Confirmed: confirmed}, nil
+	return resolvePickedOrg(orgs, picked, typed), true, nil
+}
+
+// confirmInstall asks whether to open the browser to install the App on org. It
+// is shown only when the App is not already installed. A Ctrl-C / Esc abort is
+// reported as false rather than an error so the caller can exit cleanly.
+func confirmInstall(org Org) (bool, error) {
+	proceed := true
+	group := huh.NewGroup(
+		huh.NewConfirm().
+			Key("confirm").
+			Title(fmt.Sprintf("Open your browser to install the octomerge GitHub App on %q?", org.Login)).
+			Affirmative("Yes, open browser").
+			Negative("Cancel").
+			Value(&proceed),
+	)
+	if err := huh.NewForm(group).Run(); err != nil {
+		if errors.Is(err, huh.ErrUserAborted) {
+			return false, nil
+		}
+		return false, err
+	}
+	return proceed, nil
 }
 
 // resolvePickedOrg maps the form selection back to an Org. A pick from the list
@@ -111,4 +120,52 @@ func requireNonEmpty(s string) error {
 		return errors.New("organization is required")
 	}
 	return nil
+}
+
+// configResult carries the second form's answers: whether to proceed with
+// creating the .octomerge repository, and whether it should be private.
+type configResult struct {
+	Proceed bool
+	Private bool
+}
+
+// runConfigForm renders the second TUI, shown after the App install page opens:
+// confirm the user has installed the App, then pick the .octomerge repository's
+// visibility (Private by default). As in runForm, the visibility group is its own
+// group gated by WithHideFunc, and a Ctrl-C / Esc abort is reported as a
+// not-proceeded result rather than an error so the caller exits cleanly.
+func runConfigForm(owner string) (configResult, error) {
+	proceed := true
+	visibility := "private"
+
+	groups := []*huh.Group{
+		huh.NewGroup(
+			huh.NewConfirm().
+				Key("proceed").
+				Title(fmt.Sprintf("Create the %s/%s configuration repository?", owner, configRepo)).
+				Description("Do this once you've installed octomerge in the browser.").
+				Affirmative("Yes, create it").
+				Negative("Skip").
+				Value(&proceed),
+		),
+		// Shown only when the user chooses to proceed.
+		huh.NewGroup(
+			huh.NewSelect[string]().
+				Key("visibility").
+				Title("Repository visibility").
+				Options(
+					huh.NewOption("Private", "private"),
+					huh.NewOption("Public", "public"),
+				).
+				Value(&visibility),
+		).WithHideFunc(func() bool { return !proceed }),
+	}
+
+	if err := huh.NewForm(groups...).Run(); err != nil {
+		if errors.Is(err, huh.ErrUserAborted) {
+			return configResult{Proceed: false}, nil
+		}
+		return configResult{}, err
+	}
+	return configResult{Proceed: proceed, Private: visibility == "private"}, nil
 }
