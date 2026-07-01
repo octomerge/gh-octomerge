@@ -76,5 +76,4 @@ git tag v0.1.0 && git push origin v0.1.0
 
 ## License
 
-[Apache-2.0](./LICENSE). The vendored skills (`go`, `cobra-viper`, `go-spec-reviewer`)
-are MIT, © [spf13/go-skills](https://github.com/spf13/go-skills).
+[Apache-2.0](./LICENSE).
