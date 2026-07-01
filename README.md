@@ -73,8 +73,8 @@ install/       → domain logic: org discovery, the huh form, opening the App pa
 ## Releasing
 
 Releases are automated with [semantic-release](https://semantic-release.gitbook.io) from
-[Conventional Commits](https://www.conventionalcommits.org) on `main` (`fix:` → patch,
-`feat:` → minor, `feat!:` / `BREAKING CHANGE:` → major). To cut a release, run the **release**
+[Conventional Commits](https://www.conventionalcommits.org) on `main` (`feat:` → minor,
+`feat!:` / `BREAKING CHANGE:` → major, everything else → patch). To cut a release, run the **release**
 workflow from the Actions tab (or `gh workflow run release.yml`).
 
 semantic-release computes the next version, updates `CHANGELOG.md`, tags it, and publishes a
