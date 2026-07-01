@@ -72,13 +72,14 @@ install/       → domain logic: org discovery, the huh form, opening the App pa
 
 ## Releasing
 
-Push a semver tag; [`.github/workflows/release.yml`](./.github/workflows/release.yml) uses
-[`cli/gh-extension-precompile`](https://github.com/cli/gh-extension-precompile) to build
-cross-platform binaries and attach them to the release:
+Releases are automated with [semantic-release](https://semantic-release.gitbook.io) from
+[Conventional Commits](https://www.conventionalcommits.org) on `main` (`feat:` → minor,
+`feat!:` / `BREAKING CHANGE:` → major, everything else → patch). To cut a release, run the **release**
+workflow from the Actions tab (or `gh workflow run release.yml`).
 
-```sh
-git tag v0.1.0 && git push origin v0.1.0
-```
+semantic-release computes the next version, updates `CHANGELOG.md`, tags it, and publishes a
+GitHub Release. `script/build.sh` then cross-compiles every platform binary - with the version
+baked in via `-ldflags` - and attaches them, so `gh extension install/upgrade` picks the right one.
 
 ## License
 

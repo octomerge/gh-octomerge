@@ -18,6 +18,11 @@ tasks:
     cmds:
       - go build -o {{.BIN}} .
 
+  dist:
+    desc: Cross-compile release binaries into dist/ (pass TAG=vX.Y.Z)
+    cmds:
+      - bash script/build.sh {{.TAG | default "v0.0.0-dev"}}
+
   test:
     desc: Run unit tests
     cmds:

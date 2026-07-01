@@ -1,3 +1,5 @@
 /gh-octomerge
 /gh-octomerge.exe
+/dist/
+/node_modules/
 .DS_Store

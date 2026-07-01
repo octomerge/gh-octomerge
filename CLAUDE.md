@@ -98,16 +98,17 @@ access (`orgs.go`, `repo.go`). Preserve these seams when adding features.
 
 ## Releasing
 
-Push a semver tag; `.github/workflows/release.yml` runs `cli/gh-extension-precompile`
-(`go_version_file: go.mod`) to cross-compile binaries and attach them to the release. The
-release workflow does **not** use Flox - precompile reads the Go version from `go.mod`.
+Releases are automated by `.github/workflows/release.yml` (**`workflow_dispatch`**) using
+**semantic-release v25** (config in `.releaserc.yaml`, YAML). It reads Conventional Commits on
+`main`, computes the next `v<semver>` tag, writes/commits `CHANGELOG.md` back to `main`, and
+publishes a GitHub Release. Binaries are cross-compiled by `script/build.sh` (invoked via
+`@semantic-release/exec`) and uploaded by `@semantic-release/github`;
+`actions/attest-build-provenance` attests them. The workflow uses Node (`actions/setup-node`)
++ Go (`actions/setup-go`, `go.mod`), not Flox.
 
-```sh
-git tag v0.1.0 && git push origin v0.1.0
-```
-
-The version string is injected at build time via
-`-ldflags -X github.com/octomerge/gh-octomerge/cmd.version=<tag>` (defaults to `dev`).
+The version string is injected for real here: `script/build.sh` builds with
+`-ldflags -X github.com/octomerge/gh-octomerge/cmd.version=<tag>` (defaults to `dev` for local
+builds). Asset names are `<os>-<arch>[.exe]`, which `gh` matches by suffix on install/upgrade.
 
 ## Skills
 
