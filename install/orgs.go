@@ -32,7 +32,7 @@ func ListUserOrgs() ([]Org, error) {
 
 // LookupOrgID resolves an organization login to its numeric account ID via
 // GET /orgs/{org}. The picker already knows the ID for orgs it listed; this
-// covers the paths where it doesn't — manual entry and the --org flag — so the
+// covers the paths where it doesn't - manual entry and the --org flag - so the
 // install URL can still pre-select the org via suggested_target_id.
 func LookupOrgID(login string) (int64, error) {
 	client, err := api.DefaultRESTClient()

@@ -15,7 +15,7 @@ const manualSentinel = "\x00manual"
 // selectOrg renders the org picker: choose from the user's orgs (with a
 // manual-entry fallback) or, when none are listable, type one directly. It blocks
 // until submitted or aborted, and returns the chosen org plus whether the user
-// proceeded — a Ctrl-C / Esc abort is reported as proceeded=false rather than an
+// proceeded - a Ctrl-C / Esc abort is reported as proceeded=false rather than an
 // error so the caller can exit cleanly.
 //
 // huh v2's conditional visibility is per-group, so the manual-entry Input lives in

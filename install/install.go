@@ -18,7 +18,7 @@ const (
 	// install flow lives beneath it; see InstallURL.
 	appPage = "https://github.com/apps/octomerge"
 
-	// appSlug is the App's slug on github.com — the trailing segment of appPage.
+	// appSlug is the App's slug on github.com - the trailing segment of appPage.
 	// It is how an existing installation is spotted among an org's installed apps.
 	appSlug = "octomerge"
 
@@ -44,7 +44,7 @@ type Options struct {
 // InstallURL returns the browser URL for installing octomerge on org. When the
 // org's numeric ID is known it deep-links via suggested_target_id, which
 // pre-selects that account and sends the user straight to its install/permissions
-// page — no second account pick. Without an ID it falls back to the generic
+// page - no second account pick. Without an ID it falls back to the generic
 // install flow, where GitHub shows the account picker.
 func InstallURL(org Org) string {
 	if org.ID != 0 {
@@ -63,8 +63,8 @@ func OpenApp(url string) error {
 	return nil
 }
 
-// Run orchestrates the flow: choose the target org, then — unless octomerge is
-// already installed on it — open the App install page. Either way it finishes by
+// Run orchestrates the flow: choose the target org, then - unless octomerge is
+// already installed on it - open the App install page. Either way it finishes by
 // setting up the org's .octomerge configuration repository.
 func Run(ctx context.Context, opts Options) error {
 	_ = ctx
@@ -124,7 +124,7 @@ func Run(ctx context.Context, opts Options) error {
 		url := InstallURL(target)
 		fmt.Printf("Opening %s\n", url)
 		if target.ID != 0 {
-			fmt.Printf("This opens the install page for %q — review the permissions and click Install.\n", target.Login)
+			fmt.Printf("This opens the install page for %q - review the permissions and click Install.\n", target.Login)
 		} else {
 			fmt.Printf("On the install page, choose %q and click Install.\n", target.Login)
 		}
@@ -139,8 +139,8 @@ func Run(ctx context.Context, opts Options) error {
 // setupConfigRepo is the second half of the flow: after the App install page is
 // open, generate the org's .octomerge configuration repository from the octomerge
 // template. If the repo already exists it says so and stops. Otherwise it decides
-// visibility — interactively (a confirm plus a Private/Public picker) or, with
-// --yes, unattended and private unless --public — then creates it and prints the
+// visibility - interactively (a confirm plus a Private/Public picker) or, with
+// --yes, unattended and private unless --public - then creates it and prints the
 // new repository's URL.
 func setupConfigRepo(owner string, opts Options) error {
 	exists, err := RepoExists(owner, configRepo)

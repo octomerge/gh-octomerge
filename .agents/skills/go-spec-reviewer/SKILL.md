@@ -43,7 +43,7 @@ Task tool (general-purpose):
     | Concern | What to Look For |
     |---------|-----------------|
     | Simplicity | Unnecessary layers, abstractions with only one implementation, over-engineered designs |
-    | Interfaces | Defined by the consumer, not the implementor? Small (1–3 methods)? Used where polymorphism is actually needed? |
+    | Interfaces | Defined by the consumer, not the implementor? Small (1-3 methods)? Used where polymorphism is actually needed? |
     | Error handling | Errors returned explicitly? Properly wrapped with `fmt.Errorf("%w", err)`? Not swallowed silently? |
     | Context | `context.Context` threaded through any I/O, HTTP, or long-running calls? Timeouts specified? |
     | Concurrency | Goroutines with clear ownership? Channels or mutexes used correctly? Data races avoided? |

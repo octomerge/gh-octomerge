@@ -7,14 +7,14 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 `gh-octomerge` is a precompiled **GitHub CLI extension** (Go). The command `gh octomerge`
 renders a Charm TUI that walks a user through installing the **octomerge GitHub App**
 (<https://github.com/apps/octomerge>) on one of their organizations and opens the App's
-install page in the browser — **unless the App is already installed on that org, in which
+install page in the browser - **unless the App is already installed on that org, in which
 case it skips the install page**. The flow then continues in the terminal: it generates the
 org's **`.octomerge`** configuration repository from the `octomerge/octomerge` template
 (private by default; the user can choose public), or reports that it already exists.
 
 ## Development
 
-**The host has no Go toolchain — it comes from Flox.** Almost every "go: command not found"
+**The host has no Go toolchain - it comes from Flox.** Almost every "go: command not found"
 is a missing `flox activate`. Run everything inside the env:
 
 ```sh
@@ -36,12 +36,12 @@ hook, so builds are self-contained and never download another toolchain.
 
 ## Architecture
 
-Command-first, **domains over layers** — flat, no `internal/` or `pkg/`:
+Command-first, **domains over layers** - flat, no `internal/` or `pkg/`:
 
 ```
 main.go        → cmd.Execute()
 cmd/root.go    → cobra root wrapped by fang; parses --org/--yes/--public; delegates to install.Run
-install/       → the domain package — ALL behavior lives here
+install/       → the domain package - ALL behavior lives here
   install.go   → Options, InstallURL(), OpenApp(), Run() + setupConfigRepo() orchestration
   orgs.go      → ListUserOrgs()/LookupOrgID()/AppInstalled() via go-gh REST
                  (GET /user/orgs, /orgs/{org}, /orgs/{org}/installations)
@@ -60,7 +60,7 @@ access (`orgs.go`, `repo.go`). Preserve these seams when adding features.
 
 - **Extension naming.** A gh extension's command is its repo/binary name minus the `gh-`
   prefix, and `gh extension install .` names the command after the directory. Repo, folder,
-  and binary MUST all be `gh-octomerge`. Never rename to `gh-extension` — it resolves to
+  and binary MUST all be `gh-octomerge`. Never rename to `gh-extension` - it resolves to
   `gh extension` (gh's built-in manager) and becomes unreachable.
 - **Install URL.** `install.InstallURL()` returns `https://github.com/apps/octomerge`, the
   public landing page with the Install button. Do NOT point at
@@ -70,13 +70,13 @@ access (`orgs.go`, `repo.go`). Preserve these seams when adding features.
 - **No token handling.** `orgs.go` and `repo.go` use go-gh's `api.DefaultRESTClient()`, which
   reuses gh's existing credentials and host. Don't add token plumbing.
 - **`GET /user/orgs` only returns orgs with *visible* membership.** The form's manual-entry
-  fallback exists precisely to cover private memberships and API failures — keep it.
+  fallback exists precisely to cover private memberships and API failures - keep it.
 - **Install detection is best-effort.** `AppInstalled` reads `GET /orgs/{org}/installations`
   (matching `app_slug == "octomerge"`), which needs an org owner with the `admin:org` scope.
   On success it lets `Run` skip the browser step (and its `confirmInstall` prompt); on *any*
   error `Run` warns and falls back to showing the install step, so users without the scope
   see the pre-existing behavior. This is why the open-browser Confirm is its own step
-  (`confirmInstall`) rather than bundled into `selectOrg` — the org must be known before the
+  (`confirmInstall`) rather than bundled into `selectOrg` - the org must be known before the
   check, and the check decides whether that prompt is shown at all.
 - **Config repo.** `repo.go` generates `<org>/.octomerge` from the `octomerge/octomerge`
   **template** via `POST /repos/octomerge/octomerge/generate` (repo name is literally
@@ -86,7 +86,7 @@ access (`orgs.go`, `repo.go`). Preserve these seams when adding features.
   and stops. `--yes` creates it unattended (private unless `--public`).
 - **huh v2 conditional visibility is per-group**, not per-field. The manual-entry Input is its
   own `huh.NewGroup(...).WithHideFunc(...)`; the Select and Confirm are separate groups.
-- **`manualSentinel` is `"\x00manual"`** — the NUL byte guarantees it never collides with a
+- **`manualSentinel` is `"\x00manual"`** - the NUL byte guarantees it never collides with a
   real org login used as a Select value.
 - A Ctrl-C / Esc abort is returned as an *unconfirmed result*, not an error, so the caller
   exits cleanly (see the `huh.ErrUserAborted` handling in `selectOrg`, `confirmInstall`, and
@@ -100,7 +100,7 @@ access (`orgs.go`, `repo.go`). Preserve these seams when adding features.
 
 Push a semver tag; `.github/workflows/release.yml` runs `cli/gh-extension-precompile`
 (`go_version_file: go.mod`) to cross-compile binaries and attach them to the release. The
-release workflow does **not** use Flox — precompile reads the Go version from `go.mod`.
+release workflow does **not** use Flox - precompile reads the Go version from `go.mod`.
 
 ```sh
 git tag v0.1.0 && git push origin v0.1.0
