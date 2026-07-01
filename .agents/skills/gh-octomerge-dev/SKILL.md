@@ -27,8 +27,8 @@ Flat and decoupled - no `internal/` or `pkg/` (see the `go` and `cobra-viper` sk
     main.go            → cmd.Execute()
     cmd/root.go        → cobra root wrapped by fang; parses --org/--yes; calls install.Run
     install/           → the domain package (all behavior)
-      install.go       → Options, InstallURL(), OpenApp(), Run() orchestration
-      orgs.go          → ListUserOrgs() via go-gh REST (GET /user/orgs)
+      install.go       → Options, InstallURL(org), OpenApp(), Run() orchestration
+      orgs.go          → ListUserOrgs() + LookupOrgID() via go-gh REST (GET /user/orgs, /orgs/{org})
       form.go          → huh v2 TUI (org Select + manual Input + Confirm)
       install_test.go  → table-driven tests
 
@@ -37,15 +37,20 @@ command layer only parses flags and delegates.
 
 ## Local dev loop
 
-The host has no Go - the toolchain comes from Flox (see the `flox-env` skill):
+The host has no Go - the toolchain and the Task runner both come from Flox (see the
+`flox-env` skill). Drive the loop through the Taskfile:
 
-    flox activate                      # Go 1.26.x on PATH
-    go build ./... && go test ./...    # compile + unit tests
-    go build -o gh-octomerge .         # produce the gh-<name> binary
-    gh extension install --force .     # install this dir as `gh octomerge`
+    flox activate                      # Go 1.26.x + task on PATH
+    task install                       # rebuild the binary and (re)install as `gh octomerge`
+    task test                          # unit tests
+    task build                         # just compile ./gh-octomerge
     gh octomerge                       # run the TUI
-    gh octomerge --org my-org --yes    # non-interactive: opens the App page directly
+    gh octomerge --org my-org --yes    # non-interactive: deep-links to the org's install page
 
+gh manages a local extension as a symlink to this repo and does NOT recompile it, so a
+precompiled extension only reflects source changes after `go build -o gh-octomerge .`.
+`gh extension install --force .` only re-links and even *refuses* when the command is already
+installed, which is why `task install` rebuilds then removes + re-adds the symlink.
 `gh extension install .` names the command after the directory, so the folder MUST be
 `gh-octomerge`.
 
@@ -62,11 +67,15 @@ extension manager and is unreachable. Repo, folder, and binary are all `gh-octom
 
 ## Install URL
 
-`gh octomerge` opens `https://github.com/apps/octomerge` - the public App landing page with
-the Install button - defined in `install.InstallURL()`. Do NOT point at
-`https://github.com/organizations/<org>/settings/apps/octomerge`; that is the app OWNER
-settings page, reachable only by octomerge org admins. For a deep install flow,
-`https://github.com/apps/octomerge/installations/new` is the one-line alternative.
+`gh octomerge` deep-links straight to the chosen org's install page so the user never picks
+the org twice. `InstallURL(org Org)` (in `install.go`) returns
+`https://github.com/apps/octomerge/installations/new/permissions?suggested_target_id=<id>`
+when the org's numeric ID is known - `suggested_target_id` pre-selects that account. The ID
+comes from `GET /user/orgs` for picked orgs (free) or from `LookupOrgID` (`GET /orgs/{org}`)
+for manual entry and the `--org` flag; if it can't be resolved, it falls back to
+`https://github.com/apps/octomerge/installations/new`, where GitHub shows the account picker.
+Do NOT point at `https://github.com/organizations/<org>/settings/apps/octomerge`; that is the
+app OWNER settings page, reachable only by octomerge admins.
 
 ## Releasing
 

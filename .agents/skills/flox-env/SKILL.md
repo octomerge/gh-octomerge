@@ -27,8 +27,9 @@ Almost every "missing Go" problem is just a missing `flox activate`.
 
 ## manifest.toml anatomy
 
-- `[install]` - packages (`go`, `gopls`, `gotools`). Add with `flox install <pkg>`,
-  search with `flox search <pkg>`, pin with e.g. `go.version = "^1.26"`.
+- `[install]` - packages (`go`, `gopls`, `gotools`, `go-task`). Add with `flox install <pkg>`,
+  search with `flox search <pkg>`, pin with e.g. `go.version = "^1.26"`. `go-task` provides the
+  `task` runner used by the repo's `Taskfile.yml` (e.g. `task install`).
 - `[hook] on-activate` - runs on activate. Here it sets `GOPATH="$FLOX_ENV_CACHE/go"` and
   adds `$GOPATH/bin` to PATH, keeping the Go module cache inside the (git-ignored)
   `.flox/cache` for a self-contained, reproducible env.

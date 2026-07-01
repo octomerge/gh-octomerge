@@ -13,8 +13,8 @@ import (
 	"github.com/cli/go-gh/v2/pkg/browser"
 )
 
-// appPage is the octomerge GitHub App's public landing page. It carries the
-// "Install" button and lets the user pick which account/org to install on.
+// appPage is the octomerge GitHub App's public base URL on github.com. The
+// install flow lives beneath it; see InstallURL.
 const appPage = "https://github.com/apps/octomerge"
 
 // Options configure a single run. They come from command flags; anything left
@@ -24,10 +24,17 @@ type Options struct {
 	AutoConfirm bool
 }
 
-// InstallURL returns the page to open in the browser. It is a function (rather
-// than a bare constant) so callers read intent clearly and so switching to a
-// deep-link flow later (e.g. appPage+"/installations/new") is a one-line change.
-func InstallURL() string { return appPage }
+// InstallURL returns the browser URL for installing octomerge on org. When the
+// org's numeric ID is known it deep-links via suggested_target_id, which
+// pre-selects that account and sends the user straight to its install/permissions
+// page — no second account pick. Without an ID it falls back to the generic
+// install flow, where GitHub shows the account picker.
+func InstallURL(org Org) string {
+	if org.ID != 0 {
+		return fmt.Sprintf("%s/installations/new/permissions?suggested_target_id=%d", appPage, org.ID)
+	}
+	return appPage + "/installations/new"
+}
 
 // OpenApp opens url using gh's configured browser, honoring GH_BROWSER, then the
 // gh config `browser` option, then BROWSER, then the OS default.
@@ -44,15 +51,15 @@ func OpenApp(url string) error {
 func Run(ctx context.Context, opts Options) error {
 	_ = ctx
 
-	org := opts.Org
+	target := Org{Login: opts.Org}
 	confirmed := opts.AutoConfirm
 
-	if org == "" || !confirmed {
+	if target.Login == "" || !confirmed {
 		orgs, err := ListUserOrgs()
 		if err != nil {
 			fmt.Fprintf(os.Stderr, "warning: could not list your organizations: %v\n", err)
 		}
-		res, err := runForm(orgs, org)
+		res, err := runForm(orgs, opts.Org)
 		if err != nil {
 			return err
 		}
@@ -60,15 +67,27 @@ func Run(ctx context.Context, opts Options) error {
 			fmt.Println("Aborted. No changes made.")
 			return nil
 		}
-		org = res.Org
+		target = res.Org
 	}
 
-	if org == "" {
+	if target.Login == "" {
 		return errors.New("no organization was provided")
 	}
 
-	url := InstallURL()
+	if target.ID == 0 {
+		if id, err := LookupOrgID(target.Login); err != nil {
+			fmt.Fprintf(os.Stderr, "warning: couldn't pre-select %q (%v); opening the account picker instead\n", target.Login, err)
+		} else {
+			target.ID = id
+		}
+	}
+
+	url := InstallURL(target)
 	fmt.Printf("Opening %s\n", url)
-	fmt.Printf("On the install page, choose the %q organization and click Install.\n", org)
+	if target.ID != 0 {
+		fmt.Printf("This opens the install page for %q — review the permissions and click Install.\n", target.Login)
+	} else {
+		fmt.Printf("On the install page, choose %q and click Install.\n", target.Login)
+	}
 	return OpenApp(url)
 }

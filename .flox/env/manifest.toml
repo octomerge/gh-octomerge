@@ -4,6 +4,7 @@ schema-version = "1.13.0"
 gotools.pkg-path = "gotools"
 go.pkg-path = "go"
 gopls.pkg-path = "gopls"
+go-task.pkg-path = "go-task"
 
 [hook]
 on-activate = '''

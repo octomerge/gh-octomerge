@@ -1,0 +1,39 @@
+version: '3'
+
+env:
+  GOTOOLCHAIN: local
+
+vars:
+  BIN: gh-octomerge
+
+tasks:
+  default:
+    desc: List available tasks
+    cmds:
+      - task --list
+    silent: true
+
+  build:
+    desc: Compile the {{.BIN}} binary
+    cmds:
+      - go build -o {{.BIN}} .
+
+  test:
+    desc: Run unit tests
+    cmds:
+      - go test ./...
+
+  install:
+    desc: Rebuild the binary and (re)install this checkout as `gh octomerge`
+    deps:
+      - build
+    cmds:
+      - cmd: gh extension remove octomerge
+        ignore_error: true
+      - gh extension install .
+      - gh extension list
+
+  uninstall:
+    desc: Remove the gh octomerge extension
+    cmds:
+      - gh extension remove octomerge

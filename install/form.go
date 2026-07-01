@@ -12,7 +12,7 @@ import (
 const manualSentinel = "\x00manual"
 
 type formResult struct {
-	Org       string
+	Org       Org
 	Confirmed bool
 }
 
@@ -28,7 +28,7 @@ type formResult struct {
 func runForm(orgs []Org, preselect string) (formResult, error) {
 	picked := preselect
 	typed := preselect
-	var confirmed bool
+	confirmed := true
 
 	var groups []*huh.Group
 
@@ -87,16 +87,23 @@ func runForm(orgs []Org, preselect string) (formResult, error) {
 		}
 		return formResult{}, err
 	}
-	return formResult{Org: resolveOrg(picked, typed), Confirmed: confirmed}, nil
+	return formResult{Org: resolvePickedOrg(orgs, picked, typed), Confirmed: confirmed}, nil
 }
 
-// resolveOrg returns the chosen org: the manually typed value when the manual
-// sentinel (or no selection) is active, otherwise the picked org login.
-func resolveOrg(picked, typed string) string {
-	if picked == "" || picked == manualSentinel {
-		return strings.TrimSpace(typed)
+// resolvePickedOrg maps the form selection back to an Org. A pick from the list
+// returns the matching Org (carrying its numeric ID); manual entry, no selection,
+// or a login not in the list returns an Org with just the login and ID 0, which
+// the caller resolves via the API.
+func resolvePickedOrg(orgs []Org, picked, typed string) Org {
+	if picked != "" && picked != manualSentinel {
+		for _, o := range orgs {
+			if o.Login == picked {
+				return o
+			}
+		}
+		return Org{Login: picked}
 	}
-	return picked
+	return Org{Login: strings.TrimSpace(typed)}
 }
 
 func requireNonEmpty(s string) error {

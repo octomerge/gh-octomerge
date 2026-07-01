@@ -34,23 +34,29 @@ gh octomerge --org my-org --yes # non-interactive: open the install page directl
 
 1. Lists the organizations you belong to (`GET /user/orgs`, using your existing `gh` auth).
 2. You pick one - or choose **manual entry** to type any org.
-3. After you confirm, it opens <https://github.com/apps/octomerge> in your browser, where
-   you click **Install** and choose the organization.
+3. After you confirm, it opens the install page **for the org you picked** - pre-selected via
+   `suggested_target_id`, so you don't choose it again - where you review the permissions and
+   click **Install**.
 
-> Only an organization **owner** can complete a GitHub App installation.
+> Only an organization **owner** can finish the install; for anyone else GitHub turns it into
+> a request to the org's owners. (If the org's numeric ID can't be resolved, it falls back to
+> the standard install page with the account picker.)
 
 ## Development
 
-The Go toolchain is provided by [Flox](https://flox.dev) - you don't need Go installed on
-your host.
+The Go toolchain and the [Task](https://taskfile.dev) runner are provided by
+[Flox](https://flox.dev) - you don't need Go installed on your host.
 
 ```sh
-flox activate                   # Go + gopls + goimports on PATH
-go build ./... && go test ./... # build + unit tests
-go build -o gh-octomerge .      # build the binary
-gh extension install --force .  # install this checkout as `gh octomerge`
-gh octomerge                    # try it
+flox activate   # Go, gopls, goimports, and task on PATH
+task install    # rebuild the binary and (re)install as `gh octomerge`
+task test       # run the unit tests
+task --list     # show all tasks
 ```
+
+Note: gh manages a local extension as a **symlink** to this repo and does not recompile it, so
+source changes only take effect once the binary is rebuilt - which is what `task install` does.
+(`gh extension install --force .` only re-links, and refuses when already installed.)
 
 See the `flox-env` and `gh-octomerge-dev` skills under `.agents/skills/` for details.
 
