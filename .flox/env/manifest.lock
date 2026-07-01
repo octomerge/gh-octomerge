@@ -1,0 +1,379 @@
+{
+  "lockfile-version": 1,
+  "manifest": {
+    "schema-version": "1.13.0",
+    "install": {
+      "go": {
+        "pkg-path": "go"
+      },
+      "gopls": {
+        "pkg-path": "gopls"
+      },
+      "gotools": {
+        "pkg-path": "gotools"
+      }
+    },
+    "hook": {
+      "on-activate": "  # Keep the Go module cache and installed tool binaries inside the project's\n  # Flox cache dir (git-ignored) for a reproducible, self-contained dev env.\n  export GOPATH=\"$FLOX_ENV_CACHE/go\"\n  export PATH=\"$GOPATH/bin:$PATH\"\n"
+    },
+    "profile": {},
+    "options": {
+      "systems": [
+        "aarch64-darwin",
+        "aarch64-linux",
+        "x86_64-darwin",
+        "x86_64-linux"
+      ]
+    }
+  },
+  "packages": [
+    {
+      "attr_path": "go",
+      "broken": false,
+      "derivation": "/nix/store/0j94l4ngkz3fppqd0wxqsvjwri4fny1y-go-1.26.4.drv",
+      "description": "Go Programming language",
+      "install_id": "go",
+      "license": "BSD-3-Clause",
+      "locked_url": "https://github.com/flox/nixpkgs?rev=b5aa0fbd538984f6e3d201be0005b4463d8b09f8",
+      "name": "go-1.26.4",
+      "pname": "go",
+      "rev": "b5aa0fbd538984f6e3d201be0005b4463d8b09f8",
+      "rev_count": 1024265,
+      "rev_date": "2026-06-29T09:01:53Z",
+      "scrape_date": "2026-07-01T03:12:48.444588Z",
+      "stabilities": [
+        "unstable"
+      ],
+      "unfree": false,
+      "version": "1.26.4",
+      "outputs_to_install": [
+        "out"
+      ],
+      "outputs": {
+        "out": "/nix/store/kyai650rrywrzflnwda9mbk2c2j9w68r-go-1.26.4"
+      },
+      "system": "aarch64-darwin",
+      "group": "toplevel",
+      "priority": 5
+    },
+    {
+      "attr_path": "go",
+      "broken": false,
+      "derivation": "/nix/store/a402qx3ryvfilga56w29z0izz6jgi7gi-go-1.26.4.drv",
+      "description": "Go Programming language",
+      "install_id": "go",
+      "license": "BSD-3-Clause",
+      "locked_url": "https://github.com/flox/nixpkgs?rev=b5aa0fbd538984f6e3d201be0005b4463d8b09f8",
+      "name": "go-1.26.4",
+      "pname": "go",
+      "rev": "b5aa0fbd538984f6e3d201be0005b4463d8b09f8",
+      "rev_count": 1024265,
+      "rev_date": "2026-06-29T09:01:53Z",
+      "scrape_date": "2026-07-01T03:41:23.136633Z",
+      "stabilities": [
+        "unstable"
+      ],
+      "unfree": false,
+      "version": "1.26.4",
+      "outputs_to_install": [
+        "out"
+      ],
+      "outputs": {
+        "out": "/nix/store/lgcj27hrbanbc93xm9zdrldds7b1jrw8-go-1.26.4"
+      },
+      "system": "aarch64-linux",
+      "group": "toplevel",
+      "priority": 5
+    },
+    {
+      "attr_path": "go",
+      "broken": false,
+      "derivation": "/nix/store/0lvbzgq250sass3jyxxvpamk09gcnym3-go-1.26.4.drv",
+      "description": "Go Programming language",
+      "install_id": "go",
+      "license": "BSD-3-Clause",
+      "locked_url": "https://github.com/flox/nixpkgs?rev=b5aa0fbd538984f6e3d201be0005b4463d8b09f8",
+      "name": "go-1.26.4",
+      "pname": "go",
+      "rev": "b5aa0fbd538984f6e3d201be0005b4463d8b09f8",
+      "rev_count": 1024265,
+      "rev_date": "2026-06-29T09:01:53Z",
+      "scrape_date": "2026-07-01T04:08:48.968170Z",
+      "stabilities": [
+        "unstable"
+      ],
+      "unfree": false,
+      "version": "1.26.4",
+      "outputs_to_install": [
+        "out"
+      ],
+      "outputs": {
+        "out": "/nix/store/h0z6ghmi3cihlbm163d72xs9p9nn04a1-go-1.26.4"
+      },
+      "system": "x86_64-darwin",
+      "group": "toplevel",
+      "priority": 5
+    },
+    {
+      "attr_path": "go",
+      "broken": false,
+      "derivation": "/nix/store/z0b6qhv17xys7hfpnxmk0vm31nc3pxdf-go-1.26.4.drv",
+      "description": "Go Programming language",
+      "install_id": "go",
+      "license": "BSD-3-Clause",
+      "locked_url": "https://github.com/flox/nixpkgs?rev=b5aa0fbd538984f6e3d201be0005b4463d8b09f8",
+      "name": "go-1.26.4",
+      "pname": "go",
+      "rev": "b5aa0fbd538984f6e3d201be0005b4463d8b09f8",
+      "rev_count": 1024265,
+      "rev_date": "2026-06-29T09:01:53Z",
+      "scrape_date": "2026-07-01T04:39:23.044827Z",
+      "stabilities": [
+        "unstable"
+      ],
+      "unfree": false,
+      "version": "1.26.4",
+      "outputs_to_install": [
+        "out"
+      ],
+      "outputs": {
+        "out": "/nix/store/gb0njhqswlc5n127ikgyikvq39r40l6f-go-1.26.4"
+      },
+      "system": "x86_64-linux",
+      "group": "toplevel",
+      "priority": 5
+    },
+    {
+      "attr_path": "gopls",
+      "broken": false,
+      "derivation": "/nix/store/rn01njr03hxid8v8jwxyrgqi2m6licf1-gopls-0.22.0.drv",
+      "description": "Official language server for the Go language",
+      "install_id": "gopls",
+      "license": "BSD-3-Clause",
+      "locked_url": "https://github.com/flox/nixpkgs?rev=b5aa0fbd538984f6e3d201be0005b4463d8b09f8",
+      "name": "gopls-0.22.0",
+      "pname": "gopls",
+      "rev": "b5aa0fbd538984f6e3d201be0005b4463d8b09f8",
+      "rev_count": 1024265,
+      "rev_date": "2026-06-29T09:01:53Z",
+      "scrape_date": "2026-07-01T03:12:48.533421Z",
+      "stabilities": [
+        "unstable"
+      ],
+      "unfree": false,
+      "version": "0.22.0",
+      "outputs_to_install": [
+        "out"
+      ],
+      "outputs": {
+        "out": "/nix/store/arv7k4nzcm19y615n1za89npjwcw4g2s-gopls-0.22.0"
+      },
+      "system": "aarch64-darwin",
+      "group": "toplevel",
+      "priority": 5
+    },
+    {
+      "attr_path": "gopls",
+      "broken": false,
+      "derivation": "/nix/store/dgqvh9cwnw8dwh1srgrnd5n90mdaag0i-gopls-0.22.0.drv",
+      "description": "Official language server for the Go language",
+      "install_id": "gopls",
+      "license": "BSD-3-Clause",
+      "locked_url": "https://github.com/flox/nixpkgs?rev=b5aa0fbd538984f6e3d201be0005b4463d8b09f8",
+      "name": "gopls-0.22.0",
+      "pname": "gopls",
+      "rev": "b5aa0fbd538984f6e3d201be0005b4463d8b09f8",
+      "rev_count": 1024265,
+      "rev_date": "2026-06-29T09:01:53Z",
+      "scrape_date": "2026-07-01T03:41:23.275792Z",
+      "stabilities": [
+        "unstable"
+      ],
+      "unfree": false,
+      "version": "0.22.0",
+      "outputs_to_install": [
+        "out"
+      ],
+      "outputs": {
+        "out": "/nix/store/w9hyh9fphlz401rhmv91sva94cpicy8q-gopls-0.22.0"
+      },
+      "system": "aarch64-linux",
+      "group": "toplevel",
+      "priority": 5
+    },
+    {
+      "attr_path": "gopls",
+      "broken": false,
+      "derivation": "/nix/store/0qfqir4zn72skq9ghdpwcz4ximrx4v1c-gopls-0.22.0.drv",
+      "description": "Official language server for the Go language",
+      "install_id": "gopls",
+      "license": "BSD-3-Clause",
+      "locked_url": "https://github.com/flox/nixpkgs?rev=b5aa0fbd538984f6e3d201be0005b4463d8b09f8",
+      "name": "gopls-0.22.0",
+      "pname": "gopls",
+      "rev": "b5aa0fbd538984f6e3d201be0005b4463d8b09f8",
+      "rev_count": 1024265,
+      "rev_date": "2026-06-29T09:01:53Z",
+      "scrape_date": "2026-07-01T04:08:49.061063Z",
+      "stabilities": [
+        "unstable"
+      ],
+      "unfree": false,
+      "version": "0.22.0",
+      "outputs_to_install": [
+        "out"
+      ],
+      "outputs": {
+        "out": "/nix/store/6z8644fchcyp265bdfav43f0j99vagfd-gopls-0.22.0"
+      },
+      "system": "x86_64-darwin",
+      "group": "toplevel",
+      "priority": 5
+    },
+    {
+      "attr_path": "gopls",
+      "broken": false,
+      "derivation": "/nix/store/6li8s67w4m9jnc57cpclaf6c54xwxrj1-gopls-0.22.0.drv",
+      "description": "Official language server for the Go language",
+      "install_id": "gopls",
+      "license": "BSD-3-Clause",
+      "locked_url": "https://github.com/flox/nixpkgs?rev=b5aa0fbd538984f6e3d201be0005b4463d8b09f8",
+      "name": "gopls-0.22.0",
+      "pname": "gopls",
+      "rev": "b5aa0fbd538984f6e3d201be0005b4463d8b09f8",
+      "rev_count": 1024265,
+      "rev_date": "2026-06-29T09:01:53Z",
+      "scrape_date": "2026-07-01T04:39:23.199101Z",
+      "stabilities": [
+        "unstable"
+      ],
+      "unfree": false,
+      "version": "0.22.0",
+      "outputs_to_install": [
+        "out"
+      ],
+      "outputs": {
+        "out": "/nix/store/9p7k1w1dj1qzm6rmpb8apw4qq27mlqww-gopls-0.22.0"
+      },
+      "system": "x86_64-linux",
+      "group": "toplevel",
+      "priority": 5
+    },
+    {
+      "attr_path": "gotools",
+      "broken": false,
+      "derivation": "/nix/store/8zlj1dg6xyk72qhc9s85k3jnb5jsdjx3-gotools-0.44.0.drv",
+      "description": "Additional tools for Go development",
+      "install_id": "gotools",
+      "license": "BSD-3-Clause",
+      "locked_url": "https://github.com/flox/nixpkgs?rev=b5aa0fbd538984f6e3d201be0005b4463d8b09f8",
+      "name": "gotools-0.44.0",
+      "pname": "gotools",
+      "rev": "b5aa0fbd538984f6e3d201be0005b4463d8b09f8",
+      "rev_count": 1024265,
+      "rev_date": "2026-06-29T09:01:53Z",
+      "scrape_date": "2026-07-01T03:12:48.547898Z",
+      "stabilities": [
+        "unstable"
+      ],
+      "unfree": false,
+      "version": "0.44.0",
+      "outputs_to_install": [
+        "out"
+      ],
+      "outputs": {
+        "out": "/nix/store/fh2ikzz3iwlm78r9d12chh7zml4szr1x-gotools-0.44.0"
+      },
+      "system": "aarch64-darwin",
+      "group": "toplevel",
+      "priority": 5
+    },
+    {
+      "attr_path": "gotools",
+      "broken": false,
+      "derivation": "/nix/store/x6ipqrxmaygdc47fxr8vzk1332lzyf9g-gotools-0.44.0.drv",
+      "description": "Additional tools for Go development",
+      "install_id": "gotools",
+      "license": "BSD-3-Clause",
+      "locked_url": "https://github.com/flox/nixpkgs?rev=b5aa0fbd538984f6e3d201be0005b4463d8b09f8",
+      "name": "gotools-0.44.0",
+      "pname": "gotools",
+      "rev": "b5aa0fbd538984f6e3d201be0005b4463d8b09f8",
+      "rev_count": 1024265,
+      "rev_date": "2026-06-29T09:01:53Z",
+      "scrape_date": "2026-07-01T03:41:23.297969Z",
+      "stabilities": [
+        "unstable"
+      ],
+      "unfree": false,
+      "version": "0.44.0",
+      "outputs_to_install": [
+        "out"
+      ],
+      "outputs": {
+        "out": "/nix/store/wpfrss2sa04yabkc598qprhpja37jqaz-gotools-0.44.0"
+      },
+      "system": "aarch64-linux",
+      "group": "toplevel",
+      "priority": 5
+    },
+    {
+      "attr_path": "gotools",
+      "broken": false,
+      "derivation": "/nix/store/nia8300wlrsm48xb5bly1m24jyk6yf39-gotools-0.44.0.drv",
+      "description": "Additional tools for Go development",
+      "install_id": "gotools",
+      "license": "BSD-3-Clause",
+      "locked_url": "https://github.com/flox/nixpkgs?rev=b5aa0fbd538984f6e3d201be0005b4463d8b09f8",
+      "name": "gotools-0.44.0",
+      "pname": "gotools",
+      "rev": "b5aa0fbd538984f6e3d201be0005b4463d8b09f8",
+      "rev_count": 1024265,
+      "rev_date": "2026-06-29T09:01:53Z",
+      "scrape_date": "2026-07-01T04:08:49.076424Z",
+      "stabilities": [
+        "unstable"
+      ],
+      "unfree": false,
+      "version": "0.44.0",
+      "outputs_to_install": [
+        "out"
+      ],
+      "outputs": {
+        "out": "/nix/store/c0gg0pzxcbscxlr07n0idnrkc2mzx7i3-gotools-0.44.0"
+      },
+      "system": "x86_64-darwin",
+      "group": "toplevel",
+      "priority": 5
+    },
+    {
+      "attr_path": "gotools",
+      "broken": false,
+      "derivation": "/nix/store/pwkx9kvf3v83ylcmh92s20rxk1ndxgil-gotools-0.44.0.drv",
+      "description": "Additional tools for Go development",
+      "install_id": "gotools",
+      "license": "BSD-3-Clause",
+      "locked_url": "https://github.com/flox/nixpkgs?rev=b5aa0fbd538984f6e3d201be0005b4463d8b09f8",
+      "name": "gotools-0.44.0",
+      "pname": "gotools",
+      "rev": "b5aa0fbd538984f6e3d201be0005b4463d8b09f8",
+      "rev_count": 1024265,
+      "rev_date": "2026-06-29T09:01:53Z",
+      "scrape_date": "2026-07-01T04:39:23.223258Z",
+      "stabilities": [
+        "unstable"
+      ],
+      "unfree": false,
+      "version": "0.44.0",
+      "outputs_to_install": [
+        "out"
+      ],
+      "outputs": {
+        "out": "/nix/store/8nd8gnnyll5y584wf9lapk847w53ma03-gotools-0.44.0"
+      },
+      "system": "x86_64-linux",
+      "group": "toplevel",
+      "priority": 5
+    }
+  ]
+}
