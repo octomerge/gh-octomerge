@@ -14,9 +14,8 @@
       }
     },
     "hook": {
-      "on-activate": "  # Keep the Go module cache and installed tool binaries inside the project's\n  # Flox cache dir (git-ignored) for a reproducible, self-contained dev env.\n  export GOPATH=\"$FLOX_ENV_CACHE/go\"\n  export PATH=\"$GOPATH/bin:$PATH\"\n"
+      "on-activate": "  export GOPATH=\"$FLOX_ENV_CACHE/go\"\n  export PATH=\"$GOPATH/bin:$PATH\"\n"
     },
-    "profile": {},
     "options": {
       "systems": [
         "aarch64-darwin",
